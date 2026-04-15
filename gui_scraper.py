@@ -267,7 +267,7 @@ if st.session_state.scraped_data:
                     Responde en formato Markdown profesional.
                     """
                     
-                    analysis = analyze_with_ai(openai_key, ai_model, data["name"], data["description"], revs_summary) # Aquí usaremos el prompt local
+                    # La llamada a analyze_with_ai anterior era redundante, usamos solo el bloque con el prompt detallado
                     
                     # Llamada directa con el nuevo prompt local
                     try:
@@ -290,10 +290,6 @@ if st.session_state.scraped_data:
         file_name=f"reporte_{data['name']}.txt",
         mime="text/plain"
     )
-
-# Footer
-st.markdown("---")
-st.caption("CUN ® 2026 - Departamento de Inteligencia de Mercados")
 
 # Footer
 st.markdown("---")
