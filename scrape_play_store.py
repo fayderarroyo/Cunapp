@@ -5,30 +5,37 @@ from google_play_scraper import app, reviews, Sort
 APP_ID = "com.innovasof.ClassUpn"
 OUTPUT_DIR = r"c:\Users\Fayder Arroyo Herazo\Desktop\Prueba Cun\Doble titulacion\app"
 OUTPUT_FILE = os.path.join(OUTPUT_DIR, "play_store_results.txt")
-MAX_REVIEWS = 30
+MAX_REVIEWS = 200
 
-def get_play_store_data(app_id, lang='es', country='co', max_reviews=30):
+def get_play_store_data(app_id, lang='es', country='co', max_reviews=200):
     print(f"Iniciando extracción para el APP_ID: {app_id}...")
     
     try:
         # 1. Obtener detalles de la app
         app_details = app(app_id, lang=lang, country=country)
         
-        # 2. Obtener reseñas
+        # 2. Obtener un lote amplio de reseñas para poder filtrar
         result_reviews, _ = reviews(
             app_id,
             lang=lang,
             country=country,
             sort=Sort.NEWEST,
-            count=max_reviews
+            count=1000  # Extraemos bastantes para asegurar que queden suficientes tras el filtro
         )
+        
+        # 3. Filtrar reseñas con contenido mayor a 5 caracteres
+        filtered_reviews = [r for r in result_reviews if r.get('content') and len(str(r.get('content')).strip()) > 5]
+        
+        # 4. Limitar al máximo solicitado (ej: 200)
+        final_reviews = filtered_reviews[:max_reviews]
         
         data = {
             "name": app_details.get('title', 'No encontrado'),
             "rating": app_details.get('score', 0),
             "rating_count": app_details.get('ratings', 0),
+            "descargas": app_details.get('installs', 'N/A'),
             "description": app_details.get('description', 'No encontrado'),
-            "reviews": result_reviews
+            "reviews": final_reviews
         }
         return data
 

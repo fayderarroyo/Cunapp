@@ -1,0 +1,8 @@
+__pycache__/
+*.pdf
+*.png
+*.webp
+*.bat
+*.md
+play_store_results.txt
+check_xlsx.py
